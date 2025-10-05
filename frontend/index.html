@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library - Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">Lumina Library</div>
+      <nav>
+        <ul>
+          <li class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</li>
+          <li data-section="books"><i class="fas fa-book"></i> Books</li>
+          <li data-section="members"><i class="fas fa-users"></i> Members</li>
+          <li data-section="transactions"><i class="fas fa-exchange-alt"></i> Transactions</li>
+          <li data-section="reports"><i class="fas fa-chart-bar"></i> Reports</li>
+          <li data-section="settings"><i class="fas fa-cog"></i> Settings</li>
+          <li data-section="help"><i class="fas fa-question-circle"></i> Help</li>
+          <li data-section="users"><i class="fas fa-users-cog"></i> Users</li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header>
+        <div class="search-bar">
+          <input type="text" placeholder="Search..." id="searchInput">
+          <i class="fas fa-search"></i>
+        </div>
+        <div class="user-info">
+          <span>Admin</span>
+          <img src="https://via.placeholder.com/30" alt="Admin Avatar">
+        </div>
+      </header>
+
+      <section class="dashboard">
+        <h1>Dashboard</h1>
+
+        <!-- Stats Cards -->
+        <div class="stats-cards">
+          <div class="card">
+            <i class="fas fa-book"></i>
+            <div>
+              <h3>Total Books</h3>
+              <p id="totalBooks">Total Books: 0</p>
+            </div>
+          </div>
+          <div class="card">
+            <i class="fas fa-users"></i>
+            <div>
+              <h3>Active Members</h3>
+              <p id="activeMembers">Active Members: 0</p>
+            </div>
+          </div>
+          <div class="card">
+            <i class="fas fa-exchange-alt"></i>
+            <div>
+              <h3>Books Borrowed</h3>
+              <p id="booksBorrowed">0</p>
+            </div>
+          </div>
+          <div class="card">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>
+              <h3>Overdue Books</h3>
+              <p id="overdueBooks">0</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recently Added Books -->
+        <div class="table-section" id="booksSection">
+          <h2>Recently Added Books</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>ISBN</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="booksTableBody"></tbody>
+          </table>
+          <button class="add-book-btn" id="addBookBtn">+ Add Book</button>
+        </div>
+
+        <!-- Members Section -->
+        <div class="table-section" id="membersSection" style="display: none;">
+          <h2>Members</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Member ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="membersTableBody"></tbody>
+          </table>
+          <button class="add-member-btn" id="addMemberBtn">+ Add Member</button>
+        </div>
+
+        <!-- Transactions Section -->
+        <div class="table-section" id="transactionsSection" style="display: none;">
+          <h2>Transactions</h2>
+          <div class="transaction-actions">
+            <button class="add-transaction-btn" id="borrowBookBtn">Borrow Book</button>
+            <button class="add-transaction-btn" id="returnBookBtn">Return Book</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Book ID</th>
+                <th>Member ID</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="transactionsTableBody"></tbody>
+          </table>
+        </div>
+
+        <!-- Reports Section -->
+        <div class="table-section" id="reportsSection" style="display: none;">
+          <h2>Reports</h2>
+          <p>Reports will be displayed here.</p>
+        </div>
+
+        <!-- Users Section -->
+        <div class="table-section" id="usersSection" style="display: none;">
+          <h2>Users</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Add New Book Modal -->
+  <div class="modal" id="addBookModal">
+    <div class="modal-content">
+      <span class="close-btn">×</span>
+      <h2>Add New Book</h2>
+      <form id="addBookForm">
+        <div class="form-group">
+          <label for="bookTitle">Book Title</label>
+          <input type="text" id="bookTitle" name="title" placeholder="Enter book title" required>
+        </div>
+        <div class="form-group">
+          <label for="author">Author</label>
+          <input type="text" id="author" name="author" placeholder="Enter author name" required>
+        </div>
+        <div class="form-group">
+          <label for="isbn">ISBN</label>
+          <input type="text" id="isbn" name="isbn" placeholder="Enter ISBN" required>
+        </div>
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category" name="category" required>
+            <option value="">Select category</option>
+            <option value="Fiction">Fiction</option>
+            <option value="Non-Fiction">Non-Fiction</option>
+            <option value="Science">Science</option>
+            <option value="History">History</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" name="status" required>
+            <option value="">Select status</option>
+            <option value="Available">Available</option>
+            <option value="Borrowed">Borrowed</option>
+            <option value="Reserved">Reserved</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="quantity">Quantity</label>
+          <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" min="1" required>
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" placeholder="Enter book description"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn">Cancel</button>
+          <button type="submit" class="save-btn">Save Book</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add New Member Modal -->
+  <div class="modal" id="addMemberModal">
+    <div class="modal-content">
+      <span class="close-btn">×</span>
+      <h2>Add New Member</h2>
+      <form id="addMemberForm">
+        <div class="form-group">
+          <label for="memberName">Name</label>
+          <input type="text" id="memberName" name="name" placeholder="Enter member name" required>
+        </div>
+        <div class="form-group">
+          <label for="memberId">Member ID</label>
+          <input type="text" id="memberId" name="member_id" placeholder="Enter member ID" required>
+        </div>
+        <div class="form-group">
+          <label for="memberEmail">Email</label>
+          <input type="email" id="memberEmail" name="email" placeholder="Enter email">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn">Cancel</button>
+          <button type="submit" class="save-btn">Save Member</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add New Transaction Modal -->
+  <div class="modal" id="addTransactionModal">
+    <div class="modal-content">
+      <span class="close-btn">×</span>
+      <h2 id="transactionModalTitle">Borrow Book</h2>
+      <form id="addTransactionForm">
+        <div class="form-group">
+          <label for="transactionBookId">Book ID</label>
+          <input type="number" id="transactionBookId" name="book_id" placeholder="Enter book ID" required>
+        </div>
+        <div class="form-group">
+          <label for="transactionMemberId">Member ID</label>
+          <input type="number" id="transactionMemberId" name="member_id" placeholder="Enter member ID" required>
+        </div>
+        <div class="form-group" id="dueDateGroup">
+          <label for="transactionDueDate">Due Date</label>
+          <input type="date" id="transactionDueDate" name="due_date" required>
+        </div>
+        <div class="form-group" id="transactionIdGroup" style="display: none;">
+          <label for="transactionId">Transaction ID</label>
+          <input type="number" id="transactionId" name="transaction_id" placeholder="Enter transaction ID">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn">Cancel</button>
+          <button type="submit" class="save-btn">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- User Management Modal -->
+  <div class="modal" id="userManagementModal">
+    <div class="modal-content">
+      <span class="close-btn">×</span>
+      <h2 id="userModalTitle">Register New User</h2>
+      <form id="userForm">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="Enter username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter password" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+          <label for="role">Role</label>
+          <select id="role" name="role" required>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn">Cancel</button>
+          <button type="submit" class="save-btn">Register</button>
+          <button type="button" id="toggleLoginBtn">Switch to Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
